@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
 
@@ -30,4 +30,9 @@ def home():
 def get_posts():
     return posts
 
-
+@app.get("/api/posts/{post_id}")
+def get_post(post_id: int):
+    if post_id > len(posts) - 1 or post_id < 0:
+        raise HTTPException(status_code=404, detail="Post not found")
+    else:
+        return posts[post_id]
